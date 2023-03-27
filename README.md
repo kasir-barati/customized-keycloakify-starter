@@ -1,3 +1,12 @@
+# My changes:
+
+```cmd
+cp .env.example .env
+pnpm i --frozen-lockfile
+pnpm build
+docker compose up
+```
+
 <p align="center">
     <i>🚀 A starter/demo project for <a href="https://keycloakify.dev">Keycloakify</a> v7 🚀</i>
     <br/>
