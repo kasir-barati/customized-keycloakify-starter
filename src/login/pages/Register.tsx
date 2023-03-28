@@ -4,9 +4,11 @@ import type { PageProps } from 'keycloakify/login/pages/PageProps';
 import { useGetClassName } from 'keycloakify/login/lib/useGetClassName';
 import type { KcContext } from '../kcContext';
 import type { I18n } from '../i18n';
+import { Exclude } from '../../components/Exclude';
 
 export default function Register(
     props: PageProps<
+        // Change register.ftl to login.ftl for new types
         Extract<KcContext, { pageId: 'register.ftl' }>,
         I18n
     >,
@@ -118,6 +120,84 @@ export default function Register(
                     </div>
                 </div>
 
+                {/* avatar, friends, viewedProfile, impressions */}
+
+                <div
+                    className={clsx(
+                        getClassName('kcFormGroupClass'),
+                        messagesPerField.printIfExists(
+                            'location',
+                            getClassName('kcFormGroupErrorClass'),
+                        ),
+                    )}
+                >
+                    <div
+                        className={getClassName(
+                            'kcLabelWrapperClass',
+                        )}
+                    >
+                        <label
+                            htmlFor="location"
+                            className={getClassName('kcLabelClass')}
+                        >
+                            {msg('location')}
+                        </label>
+                    </div>
+                    <div
+                        className={getClassName(
+                            'kcInputWrapperClass',
+                        )}
+                    >
+                        <input
+                            type="text"
+                            id="location"
+                            className={getClassName('kcInputClass')}
+                            name="location"
+                            defaultValue={
+                                register.formData.location ?? ''
+                            }
+                        />
+                    </div>
+                </div>
+
+                <div
+                    className={clsx(
+                        getClassName('kcFormGroupClass'),
+                        messagesPerField.printIfExists(
+                            'occupation',
+                            getClassName('kcFormGroupErrorClass'),
+                        ),
+                    )}
+                >
+                    <div
+                        className={getClassName(
+                            'kcLabelWrapperClass',
+                        )}
+                    >
+                        <label
+                            htmlFor="occupation"
+                            className={getClassName('kcLabelClass')}
+                        >
+                            {msg('occupation')}
+                        </label>
+                    </div>
+                    <div
+                        className={getClassName(
+                            'kcInputWrapperClass',
+                        )}
+                    >
+                        <input
+                            type="text"
+                            id="occupation"
+                            className={getClassName('kcInputClass')}
+                            name="occupation"
+                            defaultValue={
+                                register.formData.occupation ?? ''
+                            }
+                        />
+                    </div>
+                </div>
+
                 <div
                     className={clsx(
                         getClassName('kcFormGroupClass'),
@@ -156,7 +236,9 @@ export default function Register(
                         />
                     </div>
                 </div>
-                {!realm.registrationEmailAsUsername && (
+                <Exclude
+                    condition={realm.registrationEmailAsUsername}
+                >
                     <div
                         className={clsx(
                             getClassName('kcFormGroupClass'),
@@ -199,8 +281,8 @@ export default function Register(
                             />
                         </div>
                     </div>
-                )}
-                {passwordRequired && (
+                </Exclude>
+                <Exclude condition={!passwordRequired}>
                     <>
                         <div
                             className={clsx(
@@ -285,8 +367,8 @@ export default function Register(
                             </div>
                         </div>
                     </>
-                )}
-                {recaptchaRequired && (
+                </Exclude>
+                <Exclude condition={!recaptchaRequired}>
                     <div className="form-group">
                         <div
                             className={getClassName(
@@ -300,7 +382,7 @@ export default function Register(
                             ></div>
                         </div>
                     </div>
-                )}
+                </Exclude>
                 <div className={getClassName('kcFormGroupClass')}>
                     <div
                         id="kc-form-options"

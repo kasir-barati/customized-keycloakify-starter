@@ -12,16 +12,7 @@
         "download-builtin-keycloak-theme": "download-builtin-keycloak-theme",
         "format": "prettier -w ."
     },
-    "keycloakify": {
-        "extraLoginPages": [
-            "my-extra-page-1.ftl",
-            "my-extra-page-2.ftl"
-        ],
-        "extraAccountPages": [
-            "my-extra-page-1.ftl",
-            "my-extra-page-2.ftl"
-        ]
-    },
+    "keycloakify": {},
     "author": "kasir-barati",
     "license": "MIT",
     "keywords": [],

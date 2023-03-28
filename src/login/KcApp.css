@@ -11,6 +11,6 @@
 }
 
 .my-root-class body {
-    background: url(./assets/background.svg) no-repeat center center
+    background: url(./assets/background.jpg) no-repeat center center
         fixed;
 }

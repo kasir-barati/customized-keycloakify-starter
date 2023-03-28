@@ -35,7 +35,7 @@ services:
       # KEYCLOAK_PRODUCTION: true In prod env and configure TLS pls
     volumes:
       - keycloak_volume:/tmp
-      - ./build_keycloak/src/main/resources/theme/keycloakify-starter:/opt/bitnami/keycloak/themes/keycloakify-starter:rw
+      - ./build_keycloak/src/main/resources/theme/customized-keycloakify-starter:/opt/bitnami/keycloak/themes/customized-keycloakify-starter:rw
 
 volumes:
   mongodb_volume:
