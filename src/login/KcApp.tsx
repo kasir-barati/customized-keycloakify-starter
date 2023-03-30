@@ -62,18 +62,6 @@ export default function App(props: { kcContext: KcContext }) {
                                 doUseDefaultCss={true}
                             />
                         );
-                    case 'register.ftl':
-                        return (
-                            <Register
-                                {...{
-                                    kcContext,
-                                    i18n,
-                                    Template,
-                                    classes,
-                                }}
-                                doUseDefaultCss={true}
-                            />
-                        );
                     case 'register-user-profile.ftl':
                         return (
                             <RegisterUserProfile

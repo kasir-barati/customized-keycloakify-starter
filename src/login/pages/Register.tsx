@@ -8,7 +8,7 @@ import { Exclude } from '../../components/Exclude';
 
 export default function Register(
     props: PageProps<
-        // Change register.ftl to login.ftl for new types
+        // Change register-user-profile.ftl to login.ftl for new types
         Extract<KcContext, { pageId: 'register.ftl' }>,
         I18n
     >,

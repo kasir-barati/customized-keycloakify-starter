@@ -12,7 +12,12 @@
         "download-builtin-keycloak-theme": "download-builtin-keycloak-theme",
         "format": "prettier -w ."
     },
-    "keycloakify": {},
+    "keycloakify": {
+        "extraFields": [
+            "user.attributes.location",
+            "user.attributes.occupation"
+        ]
+    },
     "author": "kasir-barati",
     "license": "MIT",
     "keywords": [],
