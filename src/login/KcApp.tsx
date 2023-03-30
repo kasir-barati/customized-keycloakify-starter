@@ -15,7 +15,6 @@ const DefaultTemplate = lazy(
 
 const Login = lazy(() => import('./pages/Login'));
 // If you can, favor register-user-profile.ftl over register.ftl, see: https://docs.keycloakify.dev/realtime-input-validation
-const Register = lazy(() => import('./pages/Register'));
 const RegisterUserProfile = lazy(
     () => import('./pages/RegisterUserProfile'),
 );
