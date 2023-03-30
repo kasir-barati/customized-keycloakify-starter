@@ -1,86 +1,10 @@
 import { kcContext } from './kcContext';
 import {
     retrieveParamFromUrl,
-    addParamToUrl,
     updateSearchBarUrl,
 } from 'powerhooks/tools/urlSearchParams';
-import { capitalize } from 'tsafe/capitalize';
 
-export const { foo, addFooToQueryParams } = (() => {
-    const queryParamName = 'foo';
-
-    type Type = { foo: number };
-
-    const value = (() => {
-        const unparsedValue = read({ queryParamName });
-
-        if (unparsedValue === undefined) {
-            return undefined;
-        }
-
-        return JSON.parse(unparsedValue) as Type;
-    })();
-
-    function addToUrlQueryParams(params: {
-        url: string;
-        value: Type;
-    }): string {
-        const { url, value } = params;
-
-        return addParamToUrl({
-            url,
-            name: queryParamName,
-            value: JSON.stringify(value),
-        }).newUrl;
-    }
-
-    const out = {
-        [queryParamName]: value,
-        [`add${capitalize(queryParamName)}ToQueryParams` as const]:
-            addToUrlQueryParams,
-    } as const;
-
-    return out;
-})();
-
-export const { bar, addBarToQueryParams } = (() => {
-    const queryParamName = 'bar';
-
-    type Type = string;
-
-    const value = (() => {
-        const unparsedValue = read({ queryParamName });
-
-        if (unparsedValue === undefined) {
-            return undefined;
-        }
-
-        return JSON.parse(unparsedValue) as Type;
-    })();
-
-    function addToUrlQueryParams(params: {
-        url: string;
-        value: Type;
-    }): string {
-        const { url, value } = params;
-
-        return addParamToUrl({
-            url,
-            name: queryParamName,
-            value: JSON.stringify(value),
-        }).newUrl;
-    }
-
-    const out = {
-        [queryParamName]: value,
-        [`add${capitalize(queryParamName)}ToQueryParams` as const]:
-            addToUrlQueryParams,
-    } as const;
-
-    return out;
-})();
-
-function read(params: {
+export function read(params: {
     queryParamName: string;
 }): string | undefined {
     if (

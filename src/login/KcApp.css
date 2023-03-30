@@ -1,16 +1,7 @@
-.my-color {
-    color: red;
-}
-
-.my-font {
-    font-family: 'Work Sans';
-}
-
-.my-root-class {
-    background: white;
-}
-
-.my-root-class body {
-    background: url(./assets/background.jpg) no-repeat center center
-        fixed;
+.bgbody {
+    background-image: url(./assets/background.jpg);
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
 }
