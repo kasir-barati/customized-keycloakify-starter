@@ -2,6 +2,18 @@ import { getKcContext } from 'keycloakify/login';
 
 export type KcContextExtension = {
     pageId: 'register-user-profile.ftl';
+    /*
+        You're theme isn't the source of truth of how your realm and client is configured.
+        On the contrary it's to your theme to adapt to how Keycloak is configured.
+
+        Let's say you only want to alow peoples with @mit.edu.com email addresses, you would add a regexp to the email attribute in your Keycloak admin and this email ill be passed over to your theme so we can have realtime frontend validation.
+        If you hardcode the regex in your theme the validation would only be client side but an attacker could very well send an handcrafted POST with whatever email and Keycloak would be OK with it.
+
+        User attributes enables you to have only one source of truth: the Keycloak configuration.
+
+        You are of course free to configure your attribute using the JSON editor.
+        This can be easily dumped and restored.
+     */
     register: {
         formData: { location: string; occupation: string };
     };
