@@ -4,6 +4,7 @@ import { UserProfileFormFields } from './shared/UserProfileFormFields';
 import type { PageProps } from 'keycloakify/login/pages/PageProps';
 import type { KcContext } from '../kcContext';
 import type { I18n } from '../i18n';
+import { Box, Button, Link } from '@mui/material';
 
 export default function RegisterUserProfile(
     props: PageProps<
@@ -31,7 +32,8 @@ export default function RegisterUserProfile(
             displayRequiredFields={true}
             headerNode={msg('registerTitle')}
         >
-            <form
+            <Box
+                component="form"
                 id="kc-register-form"
                 action={url.registrationAction}
                 method="post"
@@ -44,35 +46,35 @@ export default function RegisterUserProfile(
                     i18n={i18n}
                 />
                 {recaptchaRequired && (
-                    <div>
-                        <div>
-                            <div
+                    <Box>
+                        <Box>
+                            <Box
                                 data-size="compact"
                                 data-sitekey={recaptchaSiteKey}
                             />
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                 )}
-                <div style={{ marginBottom: 30 }}>
-                    <div id="kc-form-options">
-                        <div>
-                            <span>
-                                <a href={url.loginUrl}>
-                                    {msg('backToLogin')}
-                                </a>
-                            </span>
-                        </div>
-                    </div>
+                <Box style={{ marginBottom: 30 }}>
+                    <Box id="kc-form-options">
+                        <Box>
+                            <Link href={url.loginUrl}>
+                                {msg('backToLogin')}
+                            </Link>
+                        </Box>
+                    </Box>
 
-                    <div id="kc-form-buttons">
-                        <input
+                    <Box id="kc-form-buttons">
+                        <Button
+                            variant="contained"
+                            color="success"
                             type="submit"
                             value={msgStr('doRegister')}
                             disabled={!isFomSubmittable}
                         />
-                    </div>
-                </div>
-            </form>
+                    </Box>
+                </Box>
+            </Box>
         </Template>
     );
 }

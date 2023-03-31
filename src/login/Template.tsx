@@ -9,6 +9,10 @@ import {
     ListItemText,
     InputLabel,
     TextField,
+    Select,
+    SelectChangeEvent,
+    MenuItem,
+    FormControl,
 } from '@mui/material';
 import { usePrepareTemplate } from 'keycloakify/lib/usePrepareTemplate';
 import { type TemplateProps } from 'keycloakify/login/TemplateProps';
@@ -43,7 +47,6 @@ export default function Template(
         labelBySupportedLanguageTag,
         currentLanguageTag,
     } = i18n;
-
     const {
         realm,
         locale,
@@ -52,7 +55,6 @@ export default function Template(
         message,
         isAppInitiatedAction,
     } = kcContext;
-
     const { isReady } = usePrepareTemplate({
         doFetchDefaultThemeResources: doUseDefaultCss,
         url,
@@ -65,6 +67,10 @@ export default function Template(
         htmlClassName: getClassName('kcHtmlClass'),
         bodyClassName: undefined,
     });
+
+    function onChangeLocale(event: SelectChangeEvent) {
+        changeLocale(event.target.value as string);
+    }
 
     if (!isReady) {
         return null;
@@ -107,46 +113,59 @@ export default function Template(
                         locale.supported.length > 1 && (
                             <Box id="kc-locale">
                                 <Box id="kc-locale-wrapper">
-                                    <Box id="kc-locale-dropdown">
-                                        <Link
-                                            underline="none"
-                                            href="#"
-                                            id="kc-current-locale-link"
-                                        >
-                                            {
-                                                labelBySupportedLanguageTag[
-                                                    currentLanguageTag
-                                                ]
-                                            }
-                                        </Link>
-                                        <List dense={true}>
-                                            {locale.supported.map(
-                                                ({ languageTag }) => (
-                                                    <ListItem
-                                                        key={
-                                                            languageTag
-                                                        }
-                                                    >
-                                                        <ListItemText>
-                                                            <Link
-                                                                href="#"
-                                                                onClick={() =>
-                                                                    changeLocale(
-                                                                        languageTag,
-                                                                    )
+                                    <Box
+                                        id="kc-locale-dropdown"
+                                        marginBottom={2}
+                                    >
+                                        <FormControl fullWidth={true}>
+                                            <InputLabel id="select-language-label">
+                                                Language
+                                            </InputLabel>
+                                            <Select
+                                                fullWidth={true}
+                                                labelId="select-language-label"
+                                                id="kc-current-locale-link"
+                                                value={
+                                                    labelBySupportedLanguageTag[
+                                                        currentLanguageTag
+                                                    ]
+                                                }
+                                                label={
+                                                    labelBySupportedLanguageTag[
+                                                        currentLanguageTag
+                                                    ]
+                                                }
+                                                onChange={
+                                                    onChangeLocale
+                                                }
+                                            >
+                                                {locale.supported.map(
+                                                    ({
+                                                        languageTag,
+                                                    }) => {
+                                                        const value =
+                                                            labelBySupportedLanguageTag[
+                                                                languageTag
+                                                            ];
+
+                                                        return (
+                                                            <MenuItem
+                                                                key={
+                                                                    languageTag
+                                                                }
+                                                                value={
+                                                                    value
                                                                 }
                                                             >
                                                                 {
-                                                                    labelBySupportedLanguageTag[
-                                                                        languageTag
-                                                                    ]
+                                                                    value
                                                                 }
-                                                            </Link>
-                                                        </ListItemText>
-                                                    </ListItem>
-                                                ),
-                                            )}
-                                        </List>
+                                                            </MenuItem>
+                                                        );
+                                                    },
+                                                )}
+                                            </Select>
+                                        </FormControl>
                                     </Box>
                                 </Box>
                             </Box>

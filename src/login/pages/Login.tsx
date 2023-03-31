@@ -94,6 +94,9 @@ export default function Login(
                             onSubmit={onSubmit}
                             action={url.loginAction}
                             method="post"
+                            sx={{
+                                '& > *': { marginBottom: '1rem' },
+                            }}
                         >
                             <FormControl
                                 focused={true}
