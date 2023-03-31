@@ -1,37 +1,24 @@
 import './KcApp.css';
 import { lazy, Suspense } from 'react';
-import Fallback, { type PageProps } from 'keycloakify/login';
+import Fallback from 'keycloakify/login';
 import type { KcContext } from './kcContext';
 import { useI18n } from './i18n';
+import { MyParticles } from '../components/MyParticles';
 
 const Template = lazy(() => import('./Template'));
 const DefaultTemplate = lazy(
     () => import('keycloakify/login/Template'),
 );
-
-// You can uncomment this to see the values passed by the main app before redirecting.
-//import { foo, bar } from "./valuesTransferredOverUrl";
-//console.log(`Values passed by the main app in the URL parameter:`, { foo, bar });
-
 const Login = lazy(() => import('./pages/Login'));
-// If you can, favor register-user-profile.ftl over register.ftl, see: https://docs.keycloakify.dev/realtime-input-validation
 const RegisterUserProfile = lazy(
     () => import('./pages/RegisterUserProfile'),
 );
 const Terms = lazy(() => import('./pages/Terms'));
 const Info = lazy(() => import('keycloakify/login/pages/Info'));
 
-// This is like adding classes to theme.properties
-// https://github.com/keycloak/keycloak/blob/11.0.3/themes/src/main/resources/theme/keycloak/login/theme.properties
-const classes: PageProps<any, any>['classes'] = {
-    // NOTE: The classes are defined in ./KcApp.css
-    kcHtmlClass: 'my-root-class',
-    kcHeaderWrapperClass: 'my-color my-font',
-};
-
+// renders different pages of a Keycloak theme depending on the kcContext prop passed to it.
 export default function App(props: { kcContext: KcContext }) {
     const { kcContext } = props;
-
     const i18n = useI18n({ kcContext });
 
     if (i18n === null) {
@@ -51,55 +38,55 @@ export default function App(props: { kcContext: KcContext }) {
                 switch (kcContext.pageId) {
                     case 'login.ftl':
                         return (
-                            <Login
-                                {...{
-                                    kcContext,
-                                    i18n,
-                                    Template,
-                                    classes,
-                                }}
-                                doUseDefaultCss={true}
-                            />
+                            <>
+                                <Login
+                                    kcContext={kcContext}
+                                    i18n={i18n}
+                                    Template={Template}
+                                    doUseDefaultCss={false}
+                                />
+                                <MyParticles />
+                            </>
                         );
                     case 'register-user-profile.ftl':
                         return (
-                            <RegisterUserProfile
-                                {...{
-                                    kcContext,
-                                    i18n,
-                                    Template,
-                                    classes,
-                                }}
-                                doUseDefaultCss={true}
-                            />
+                            <>
+                                <RegisterUserProfile
+                                    kcContext={kcContext}
+                                    i18n={i18n}
+                                    Template={Template}
+                                    doUseDefaultCss={false}
+                                />
+                                <MyParticles />
+                            </>
                         );
                     case 'terms.ftl':
                         return (
                             <Terms
-                                {...{
-                                    kcContext,
-                                    i18n,
-                                    Template,
-                                    classes,
-                                }}
-                                doUseDefaultCss={true}
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                Template={Template}
+                                doUseDefaultCss={false}
                             />
                         );
                     // We choose to use the default Template for the Info page and to download the theme resources.
                     case 'info.ftl':
                         return (
                             <Info
-                                {...{ kcContext, i18n, classes }}
+                                kcContext={kcContext}
+                                i18n={i18n}
                                 Template={DefaultTemplate}
-                                doUseDefaultCss={true}
+                                doUseDefaultCss={false}
                             />
                         );
                     default:
+                        // In the context of keycloakify, the Fallback component is used to render a generic error message when a user navigates to an unknown or unsupported Keycloak login page. It's also used as a fallback component when the Keycloak server is down or unreachable.
                         return (
                             <Fallback
-                                {...{ kcContext, i18n, classes }}
+                                kcContext={kcContext}
+                                i18n={i18n}
                                 Template={DefaultTemplate}
-                                doUseDefaultCss={true}
+                                doUseDefaultCss={false}
                             />
                         );
                 }

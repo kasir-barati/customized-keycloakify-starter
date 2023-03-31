@@ -1,6 +1,4 @@
 import { useEffect, Fragment } from 'react';
-import type { ClassKey } from 'keycloakify/login/TemplateProps';
-import { clsx } from 'keycloakify/tools/clsx';
 import { useFormValidation } from 'keycloakify/login/lib/useFormValidation';
 import type { Attribute } from 'keycloakify/login/kcContext/KcContext';
 import type { I18n } from '../../i18n';
@@ -8,7 +6,6 @@ import type { I18n } from '../../i18n';
 export type UserProfileFormFieldsProps = {
     kcContext: Parameters<typeof useFormValidation>[0]['kcContext'];
     i18n: I18n;
-    getClassName: (classKey: ClassKey) => string;
     onIsFormSubmittableValueChange: (
         isFormSubmittable: boolean,
     ) => void;
@@ -27,13 +24,10 @@ export function UserProfileFormFields(
         kcContext,
         onIsFormSubmittableValueChange,
         i18n,
-        getClassName,
         BeforeField,
         AfterField,
     } = props;
-
     const { advancedMsg } = i18n;
-
     const {
         formValidationState: {
             fieldStateByAttributeName,
@@ -64,28 +58,13 @@ export function UserProfileFormFields(
                 const { value, displayableErrors } =
                     fieldStateByAttributeName[attribute.name];
 
-                const formGroupClassName = clsx(
-                    getClassName('kcFormGroupClass'),
-                    displayableErrors.length !== 0 &&
-                        getClassName('kcFormGroupErrorClass'),
-                );
-
                 return (
                     <Fragment key={i}>
                         {group !== currentGroup &&
                             (currentGroup = group) !== '' && (
-                                <div className={formGroupClassName}>
-                                    <div
-                                        className={getClassName(
-                                            'kcContentWrapperClass',
-                                        )}
-                                    >
-                                        <label
-                                            id={`header-${group}`}
-                                            className={getClassName(
-                                                'kcFormGroupHeader',
-                                            )}
-                                        >
+                                <div>
+                                    <div>
+                                        <label id={`header-${group}`}>
                                             {advancedMsg(
                                                 groupDisplayHeader,
                                             ) || currentGroup}
@@ -93,16 +72,9 @@ export function UserProfileFormFields(
                                     </div>
                                     {groupDisplayDescription !==
                                         '' && (
-                                        <div
-                                            className={getClassName(
-                                                'kcLabelWrapperClass',
-                                            )}
-                                        >
+                                        <div>
                                             <label
                                                 id={`description-${group}`}
-                                                className={getClassName(
-                                                    'kcLabelClass',
-                                                )}
                                             >
                                                 {advancedMsg(
                                                     groupDisplayDescription,
@@ -117,29 +89,16 @@ export function UserProfileFormFields(
                             <BeforeField attribute={attribute} />
                         )}
 
-                        <div className={formGroupClassName}>
-                            <div
-                                className={getClassName(
-                                    'kcLabelWrapperClass',
-                                )}
-                            >
-                                <label
-                                    htmlFor={attribute.name}
-                                    className={getClassName(
-                                        'kcLabelClass',
-                                    )}
-                                >
+                        <div>
+                            <div>
+                                <label htmlFor={attribute.name}>
                                     {advancedMsg(
                                         attribute.displayName ?? '',
                                     )}
                                 </label>
                                 {attribute.required && <>*</>}
                             </div>
-                            <div
-                                className={getClassName(
-                                    'kcInputWrapperClass',
-                                )}
-                            >
+                            <div>
                                 {(() => {
                                     const { options } =
                                         attribute.validators;
@@ -225,9 +184,6 @@ export function UserProfileFormFields(
                                                     },
                                                 )
                                             }
-                                            className={getClassName(
-                                                'kcInputClass',
-                                            )}
                                             aria-invalid={
                                                 displayableErrors.length !==
                                                 0
@@ -250,9 +206,6 @@ export function UserProfileFormFields(
                                                 <style>{`#${divId} > span: { display: block; }`}</style>
                                                 <span
                                                     id={divId}
-                                                    className={getClassName(
-                                                        'kcInputErrorMessageClass',
-                                                    )}
                                                     style={{
                                                         position:
                                                             displayableErrors.length ===

@@ -13,6 +13,7 @@ export const { useI18n } = createUseI18n({
         doForgotPassword: 'I forgot my password',
         location: 'Where are living?',
         occupation: 'Occupation',
+        loginWelcomeMessage: 'Welcome back :)',
     },
     fr: {
         /* spell-checker: disable */
@@ -23,6 +24,7 @@ export const { useI18n } = createUseI18n({
         /* spell-checker: enable */
         location: 'Where are living?',
         occupation: 'Occupation',
+        loginWelcomeMessage: 'Welcome back :)',
     },
 });
 

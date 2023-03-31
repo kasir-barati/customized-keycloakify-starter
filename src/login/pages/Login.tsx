@@ -1,26 +1,31 @@
 // ejected using 'npx eject-keycloak-page'
+import {
+    Box,
+    TextField,
+    FormControl,
+    FormHelperText,
+    Link,
+    Checkbox,
+    FormGroup,
+    FormControlLabel,
+    Button,
+    Stack,
+} from '@mui/material';
 import { useState, type FormEventHandler } from 'react';
-import { clsx } from 'keycloakify/tools/clsx';
 import { useConstCallback } from 'keycloakify/tools/useConstCallback';
 import type { PageProps } from 'keycloakify/login/pages/PageProps';
-import { useGetClassName } from 'keycloakify/login/lib/useGetClassName';
 import type { KcContext } from '../kcContext';
 import type { I18n } from '../i18n';
 
 export default function Login(
+    // a PageProps object that has some fields specific to the "login.ftl" page in Keycloak.
     props: PageProps<
         Extract<KcContext, { pageId: 'login.ftl' }>,
         I18n
     >,
 ) {
-    const { kcContext, i18n, doUseDefaultCss, Template, classes } =
-        props;
-
-    const { getClassName } = useGetClassName({
-        doUseDefaultCss,
-        classes,
-    });
-
+    // Extract some data from kcContext and i18n objects that are passed in through props
+    const { kcContext, i18n, Template, doUseDefaultCss } = props;
     const {
         social,
         realm,
@@ -30,12 +35,9 @@ export default function Login(
         auth,
         registrationDisabled,
     } = kcContext;
-
     const { msg, msgStr } = i18n;
-
     const [isLoginButtonDisabled, setIsLoginButtonDisabled] =
         useState(false);
-
     const onSubmit = useConstCallback<
         FormEventHandler<HTMLFormElement>
     >((e) => {
@@ -56,63 +58,46 @@ export default function Login(
 
     return (
         <Template
-            {...{ kcContext, i18n, doUseDefaultCss, classes }}
+            doUseDefaultCss={doUseDefaultCss}
+            kcContext={kcContext}
+            i18n={i18n}
             displayInfo={social.displayInfo}
             displayWide={
                 realm.password && social.providers !== undefined
             }
-            headerNode={msg('doLogIn')}
+            headerNode={msg('loginWelcomeMessage')}
             infoNode={
                 realm.password &&
                 realm.registrationAllowed &&
                 !registrationDisabled && (
-                    <div id="kc-registration">
-                        <span>
-                            {msg('noAccount')}
-                            <a
-                                tabIndex={6}
-                                href={url.registrationUrl}
-                            >
-                                {msg('doRegister')}
-                            </a>
-                        </span>
-                    </div>
+                    <Box id="kc-registration" marginY={1}>
+                        {msg('noAccount')}&nbsp;
+                        <Link
+                            underline="none"
+                            tabIndex={6}
+                            href={url.registrationUrl}
+                        >
+                            {msg('doRegister')}
+                        </Link>
+                    </Box>
                 )
             }
         >
-            <div
-                id="kc-form"
-                className={clsx(
-                    realm.password &&
-                        social.providers !== undefined &&
-                        getClassName('kcContentWrapperClass'),
-                )}
-            >
-                <div
-                    id="kc-form-wrapper"
-                    className={clsx(
-                        realm.password &&
-                            social.providers && [
-                                getClassName(
-                                    'kcFormSocialAccountContentClass',
-                                ),
-                                getClassName(
-                                    'kcFormSocialAccountClass',
-                                ),
-                            ],
-                    )}
-                >
+            <Box id="kc-form" textAlign="center">
+                <Box id="kc-form-wrapper">
                     {realm.password && (
-                        <form
+                        <Box
+                            component="form"
+                            textAlign="left"
+                            autoComplete="off"
                             id="kc-form-login"
                             onSubmit={onSubmit}
                             action={url.loginAction}
                             method="post"
                         >
-                            <div
-                                className={getClassName(
-                                    'kcFormGroupClass',
-                                )}
+                            <FormControl
+                                focused={true}
+                                fullWidth={true}
                             >
                                 {(() => {
                                     const label =
@@ -129,24 +114,13 @@ export default function Login(
 
                                     return (
                                         <>
-                                            <label
-                                                htmlFor={
-                                                    autoCompleteHelper
-                                                }
-                                                className={getClassName(
-                                                    'kcLabelClass',
-                                                )}
-                                            >
-                                                {msg(label)}
-                                            </label>
-                                            <input
+                                            <TextField
+                                                label={msg(label)}
+                                                variant="outlined"
                                                 tabIndex={1}
                                                 id={
                                                     autoCompleteHelper
                                                 }
-                                                className={getClassName(
-                                                    'kcInputClass',
-                                                )}
                                                 //NOTE: This is used by Google Chrome auto fill so we use it to tell
                                                 //the browser how to pre fill the form but before submit we put it back
                                                 //to username because it is what keycloak expects.
@@ -157,7 +131,6 @@ export default function Login(
                                                     login.username ??
                                                     ''
                                                 }
-                                                type="text"
                                                 {...(usernameEditDisabled
                                                     ? {
                                                           disabled:
@@ -170,172 +143,113 @@ export default function Login(
                                                               'off',
                                                       })}
                                             />
+                                            <FormHelperText>
+                                                Please enter your
+                                                {msg(label)}.
+                                            </FormHelperText>
                                         </>
                                     );
                                 })()}
-                            </div>
-                            <div
-                                className={getClassName(
-                                    'kcFormGroupClass',
-                                )}
-                            >
-                                <label
-                                    htmlFor="password"
-                                    className={getClassName(
-                                        'kcLabelClass',
-                                    )}
-                                >
-                                    {msg('password')}
-                                </label>
-                                <input
+                            </FormControl>
+                            <FormControl fullWidth={true}>
+                                <TextField
                                     tabIndex={2}
+                                    label={msg('password')}
                                     id="password"
-                                    className={getClassName(
-                                        'kcInputClass',
-                                    )}
                                     name="password"
                                     type="password"
                                     autoComplete="off"
                                 />
-                            </div>
-                            <div
-                                className={clsx(
-                                    getClassName('kcFormGroupClass'),
-                                    getClassName(
-                                        'kcFormSettingClass',
-                                    ),
-                                )}
-                            >
-                                <div id="kc-form-options">
+                                <FormHelperText>
+                                    Please enter your&nbsp;
+                                    {msg('password')}.
+                                </FormHelperText>
+                            </FormControl>
+                            <FormControl fullWidth={true}>
+                                <FormGroup id="kc-form-options">
                                     {realm.rememberMe &&
                                         !usernameEditDisabled && (
-                                            <div className="checkbox">
-                                                <label>
-                                                    <input
+                                            <FormControlLabel
+                                                label={msg(
+                                                    'rememberMe',
+                                                )}
+                                                control={
+                                                    <Checkbox
                                                         tabIndex={3}
                                                         id="rememberMe"
                                                         name="rememberMe"
-                                                        type="checkbox"
-                                                        {...(login.rememberMe
-                                                            ? {
-                                                                  checked:
-                                                                      true,
-                                                              }
-                                                            : {})}
+                                                        checked={Boolean(
+                                                            login.rememberMe,
+                                                        )}
                                                     />
-                                                    {msg(
-                                                        'rememberMe',
-                                                    )}
-                                                </label>
-                                            </div>
-                                        )}
-                                </div>
-                                <div
-                                    className={getClassName(
-                                        'kcFormOptionsWrapperClass',
-                                    )}
-                                >
-                                    {realm.resetPasswordAllowed && (
-                                        <span>
-                                            <a
-                                                tabIndex={5}
-                                                href={
-                                                    url.loginResetCredentialsUrl
                                                 }
-                                            >
-                                                {msg(
-                                                    'doForgotPassword',
-                                                )}
-                                            </a>
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                            <div
+                                            ></FormControlLabel>
+                                        )}
+                                </FormGroup>
+                            </FormControl>
+                            <FormControl
+                                fullWidth={true}
+                                sx={{ margin: '1rem auto' }}
                                 id="kc-form-buttons"
-                                className={getClassName(
-                                    'kcFormGroupClass',
-                                )}
                             >
-                                <input
-                                    type="hidden"
-                                    id="id-hidden-input"
-                                    name="credentialId"
-                                    {...(auth?.selectedCredential !==
-                                    undefined
-                                        ? {
-                                              value: auth.selectedCredential,
-                                          }
-                                        : {})}
-                                />
-                                <input
-                                    tabIndex={4}
-                                    className={clsx(
-                                        getClassName('kcButtonClass'),
-                                        getClassName(
-                                            'kcButtonPrimaryClass',
-                                        ),
-                                        getClassName(
-                                            'kcButtonBlockClass',
-                                        ),
-                                        getClassName(
-                                            'kcButtonLargeClass',
-                                        ),
+                                <Stack direction="row" spacing={1}>
+                                    <input
+                                        type="hidden"
+                                        id="id-hidden-input"
+                                        name="credentialId"
+                                        value={
+                                            auth.selectedCredential
+                                        }
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        tabIndex={4}
+                                        name="login"
+                                        id="kc-login"
+                                        type="submit"
+                                        disabled={
+                                            isLoginButtonDisabled
+                                        }
+                                    >
+                                        {msgStr('doLogIn')}
+                                    </Button>
+                                    {realm.resetPasswordAllowed && (
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            tabIndex={5}
+                                            href={
+                                                url.loginResetCredentialsUrl
+                                            }
+                                        >
+                                            {msgStr(
+                                                'doForgotPassword',
+                                            )}
+                                        </Button>
                                     )}
-                                    name="login"
-                                    id="kc-login"
-                                    type="submit"
-                                    value={msgStr('doLogIn')}
-                                    disabled={isLoginButtonDisabled}
-                                />
-                            </div>
-                        </form>
+                                </Stack>
+                            </FormControl>
+                        </Box>
                     )}
-                </div>
+                </Box>
                 {realm.password && social.providers !== undefined && (
-                    <div
-                        id="kc-social-providers"
-                        className={clsx(
-                            getClassName(
-                                'kcFormSocialAccountContentClass',
-                            ),
-                            getClassName('kcFormSocialAccountClass'),
-                        )}
-                    >
-                        <ul
-                            className={clsx(
-                                getClassName(
-                                    'kcFormSocialAccountListClass',
-                                ),
-                                social.providers.length > 4 &&
-                                    getClassName(
-                                        'kcFormSocialAccountDoubleListClass',
-                                    ),
-                            )}
-                        >
+                    <Box id="kc-social-providers">
+                        <ul>
                             {social.providers.map((p) => (
-                                <li
-                                    key={p.providerId}
-                                    className={getClassName(
-                                        'kcFormSocialAccountListLinkClass',
-                                    )}
-                                >
+                                <li key={p.providerId}>
                                     <a
                                         href={p.loginUrl}
                                         id={`zocial-${p.alias}`}
-                                        className={clsx(
-                                            'zocial',
-                                            p.providerId,
-                                        )}
                                     >
                                         <span>{p.displayName}</span>
                                     </a>
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </Box>
                 )}
-            </div>
+            </Box>
         </Template>
     );
 }

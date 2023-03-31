@@ -1,7 +1,15 @@
 // Copy pasted from: https://github.com/InseeFrLab/keycloakify/blob/main/src/login/Template.tsx
-
 import { assert } from 'keycloakify/tools/assert';
-import { clsx } from 'keycloakify/tools/clsx';
+import {
+    Box,
+    Typography,
+    Link,
+    List,
+    ListItem,
+    ListItemText,
+    InputLabel,
+    TextField,
+} from '@mui/material';
 import { usePrepareTemplate } from 'keycloakify/lib/usePrepareTemplate';
 import { type TemplateProps } from 'keycloakify/login/TemplateProps';
 import { useGetClassName } from 'keycloakify/login/lib/useGetClassName';
@@ -15,7 +23,6 @@ export default function Template(
         displayInfo = false,
         displayMessage = true,
         displayRequiredFields = false,
-        displayWide = false,
         showAnotherWayIfPresent = true,
         headerNode,
         showUsernameNode = null,
@@ -26,12 +33,10 @@ export default function Template(
         classes,
         children,
     } = props;
-
     const { getClassName } = useGetClassName({
         doUseDefaultCss,
         classes,
     });
-
     const {
         msg,
         changeLocale,
@@ -66,43 +71,45 @@ export default function Template(
     }
 
     return (
-        <div className={getClassName('kcLoginClass')}>
-            <div
-                id="kc-header"
-                className={getClassName('kcHeaderClass')}
-            >
-                <div
+        <Box
+            textAlign="center"
+            bgcolor="rgba(213, 213,213, 0.7)"
+            minHeight="100vh"
+        >
+            <Box id="kc-header" marginBottom={4}>
+                <Box
                     id="kc-header-wrapper"
-                    className={getClassName('kcHeaderWrapperClass')}
+                    padding={1}
+                    bgcolor="white"
+                    textAlign="center"
                 >
-                    {msg('loginTitleHtml', realm.displayNameHtml)}
-                </div>
-            </div>
+                    <Typography
+                        variant="h3"
+                        color="turquoise"
+                        fontWeight={900}
+                    >
+                        {msg('loginTitleHtml', realm.displayNameHtml)}
+                    </Typography>
+                </Box>
+            </Box>
 
-            <div
-                className={clsx(
-                    getClassName('kcFormCardClass'),
-                    displayWide &&
-                        getClassName('kcFormCardAccountClass'),
-                )}
+            <Box
+                width="50vw"
+                marginY={1}
+                marginX="auto"
+                padding={3}
+                borderRadius={13}
+                bgcolor="white"
             >
-                <header className={getClassName('kcFormHeaderClass')}>
+                <Box component="header" marginY={1} textAlign="left">
                     {realm.internationalizationEnabled &&
                         (assert(locale !== undefined), true) &&
                         locale.supported.length > 1 && (
-                            <div id="kc-locale">
-                                <div
-                                    id="kc-locale-wrapper"
-                                    className={getClassName(
-                                        'kcLocaleWrapperClass',
-                                    )}
-                                >
-                                    <div
-                                        className="kc-dropdown"
-                                        id="kc-locale-dropdown"
-                                    >
-                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                        <a
+                            <Box id="kc-locale">
+                                <Box id="kc-locale-wrapper">
+                                    <Box id="kc-locale-dropdown">
+                                        <Link
+                                            underline="none"
                                             href="#"
                                             id="kc-current-locale-link"
                                         >
@@ -111,38 +118,38 @@ export default function Template(
                                                     currentLanguageTag
                                                 ]
                                             }
-                                        </a>
-                                        <ul>
+                                        </Link>
+                                        <List dense={true}>
                                             {locale.supported.map(
                                                 ({ languageTag }) => (
-                                                    <li
+                                                    <ListItem
                                                         key={
                                                             languageTag
                                                         }
-                                                        className="kc-dropdown-item"
                                                     >
-                                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                                        <a
-                                                            href="#"
-                                                            onClick={() =>
-                                                                changeLocale(
-                                                                    languageTag,
-                                                                )
-                                                            }
-                                                        >
-                                                            {
-                                                                labelBySupportedLanguageTag[
-                                                                    languageTag
-                                                                ]
-                                                            }
-                                                        </a>
-                                                    </li>
+                                                        <ListItemText>
+                                                            <Link
+                                                                href="#"
+                                                                onClick={() =>
+                                                                    changeLocale(
+                                                                        languageTag,
+                                                                    )
+                                                                }
+                                                            >
+                                                                {
+                                                                    labelBySupportedLanguageTag[
+                                                                        languageTag
+                                                                    ]
+                                                                }
+                                                            </Link>
+                                                        </ListItemText>
+                                                    </ListItem>
                                                 ),
                                             )}
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                                        </List>
+                                    </Box>
+                                </Box>
+                            </Box>
                         )}
                     {!(
                         auth !== undefined &&
@@ -150,64 +157,44 @@ export default function Template(
                         !auth.showResetCredentials
                     ) ? (
                         displayRequiredFields ? (
-                            <div
-                                className={getClassName(
-                                    'kcContentWrapperClass',
-                                )}
-                            >
-                                <div
-                                    className={clsx(
-                                        getClassName(
-                                            'kcLabelWrapperClass',
-                                        ),
-                                        'subtitle',
-                                    )}
-                                >
-                                    <span className="subtitle">
-                                        <span className="required">
-                                            *
-                                        </span>
+                            <Box>
+                                <Box>
+                                    <span>
+                                        <span>*</span>
                                         {msg('requiredFields')}
                                     </span>
-                                </div>
-                                <div className="col-md-10">
-                                    <h1 id="kc-page-title">
+                                </Box>
+                                <Box>
+                                    <Typography
+                                        variant="h5"
+                                        fontWeight={700}
+                                        id="kc-page-title"
+                                    >
                                         {headerNode}
-                                    </h1>
-                                </div>
-                            </div>
+                                    </Typography>
+                                </Box>
+                            </Box>
                         ) : (
-                            <h1 id="kc-page-title">{headerNode}</h1>
+                            <Typography
+                                variant="h5"
+                                fontWeight={700}
+                                id="kc-page-title"
+                            >
+                                {headerNode}
+                            </Typography>
                         )
                     ) : displayRequiredFields ? (
-                        <div
-                            className={getClassName(
-                                'kcContentWrapperClass',
-                            )}
-                        >
-                            <div
-                                className={clsx(
-                                    getClassName(
-                                        'kcLabelWrapperClass',
-                                    ),
-                                    'subtitle',
-                                )}
-                            >
-                                <span className="subtitle">
-                                    <span className="required">
-                                        *
-                                    </span>{' '}
+                        <Box>
+                            <Box>
+                                <span>
+                                    <span>*</span>{' '}
                                     {msg('requiredFields')}
                                 </span>
-                            </div>
-                            <div className="col-md-10">
+                            </Box>
+                            <Box>
                                 {showUsernameNode}
-                                <div
-                                    className={getClassName(
-                                        'kcFormGroupClass',
-                                    )}
-                                >
-                                    <div id="kc-username">
+                                <Box>
+                                    <Box id="kc-username">
                                         <label id="kc-attempted-username">
                                             {auth?.attemptedUsername}
                                         </label>
@@ -217,182 +204,116 @@ export default function Template(
                                                 url.loginRestartFlowUrl
                                             }
                                         >
-                                            <div className="kc-login-tooltip">
-                                                <i
-                                                    className={getClassName(
-                                                        'kcResetFlowIcon',
-                                                    )}
-                                                ></i>
-                                                <span className="kc-tooltip-text">
+                                            <Box>
+                                                <i></i>
+                                                <span>
                                                     {msg(
                                                         'restartLoginTooltip',
                                                     )}
                                                 </span>
-                                            </div>
+                                            </Box>
                                         </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        </Box>
                     ) : (
                         <>
                             {showUsernameNode}
-                            <div
-                                className={getClassName(
-                                    'kcFormGroupClass',
-                                )}
-                            >
-                                <div id="kc-username">
-                                    <label id="kc-attempted-username">
+                            <Box>
+                                <Box id="kc-username">
+                                    <InputLabel id="kc-attempted-username">
                                         {auth?.attemptedUsername}
-                                    </label>
-                                    <a
+                                    </InputLabel>
+                                    <Link
                                         id="reset-login"
                                         href={url.loginRestartFlowUrl}
                                     >
-                                        <div className="kc-login-tooltip">
-                                            <i
-                                                className={getClassName(
-                                                    'kcResetFlowIcon',
-                                                )}
-                                            ></i>
-                                            <span className="kc-tooltip-text">
+                                        <Box>
+                                            <i></i>
+                                            <span>
                                                 {msg(
                                                     'restartLoginTooltip',
                                                 )}
                                             </span>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                                        </Box>
+                                    </Link>
+                                </Box>
+                            </Box>
                         </>
                     )}
-                </header>
-                <div id="kc-content">
-                    <div id="kc-content-wrapper">
+                </Box>
+                <Box id="kc-content" textAlign="left">
+                    <Box id="kc-content-wrapper">
                         {/* App-initiated actions should not see warning messages about the need to complete the action during login. */}
                         {displayMessage &&
                             message !== undefined &&
                             (message.type !== 'warning' ||
                                 !isAppInitiatedAction) && (
-                                <div
-                                    className={clsx(
-                                        'alert',
-                                        `alert-${message.type}`,
-                                    )}
-                                >
+                                <Box marginY={1}>
                                     {message.type === 'success' && (
-                                        <span
-                                            className={getClassName(
-                                                'kcFeedbackSuccessIcon',
-                                            )}
-                                        ></span>
+                                        <span></span>
                                     )}
                                     {message.type === 'warning' && (
-                                        <span
-                                            className={getClassName(
-                                                'kcFeedbackWarningIcon',
-                                            )}
-                                        ></span>
+                                        <span></span>
                                     )}
                                     {message.type === 'error' && (
-                                        <span
-                                            className={getClassName(
-                                                'kcFeedbackErrorIcon',
-                                            )}
-                                        ></span>
+                                        <span></span>
                                     )}
                                     {message.type === 'info' && (
-                                        <span
-                                            className={getClassName(
-                                                'kcFeedbackInfoIcon',
-                                            )}
-                                        ></span>
+                                        <span></span>
                                     )}
                                     <span
-                                        className="kc-feedback-text"
                                         dangerouslySetInnerHTML={{
                                             __html: message.summary,
                                         }}
                                     />
-                                </div>
+                                </Box>
                             )}
                         {children}
                         {auth !== undefined &&
                             auth.showTryAnotherWayLink &&
                             showAnotherWayIfPresent && (
-                                <form
+                                <Box
+                                    component="form"
+                                    width="100%"
+                                    textAlign="left"
                                     id="kc-select-try-another-way-form"
                                     action={url.loginAction}
                                     method="post"
-                                    className={clsx(
-                                        displayWide &&
-                                            getClassName(
-                                                'kcContentWrapperClass',
-                                            ),
-                                    )}
                                 >
-                                    <div
-                                        className={clsx(
-                                            displayWide && [
-                                                getClassName(
-                                                    'kcFormSocialAccountContentClass',
-                                                ),
-                                                getClassName(
-                                                    'kcFormSocialAccountClass',
-                                                ),
-                                            ],
-                                        )}
-                                    >
-                                        <div
-                                            className={getClassName(
-                                                'kcFormGroupClass',
-                                            )}
+                                    <Box marginY={1}>
+                                        <TextField
+                                            type="hidden"
+                                            name="tryAnotherWay"
+                                            value="on"
+                                        />
+                                        <Link
+                                            underline="none"
+                                            href="#"
+                                            id="try-another-way"
+                                            onClick={() => {
+                                                document.forms[
+                                                    'kc-select-try-another-way-form' as never
+                                                ].submit();
+                                                return false;
+                                            }}
                                         >
-                                            <input
-                                                type="hidden"
-                                                name="tryAnotherWay"
-                                                value="on"
-                                            />
-                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a
-                                                href="#"
-                                                id="try-another-way"
-                                                onClick={() => {
-                                                    document.forms[
-                                                        'kc-select-try-another-way-form' as never
-                                                    ].submit();
-                                                    return false;
-                                                }}
-                                            >
-                                                {msg(
-                                                    'doTryAnotherWay',
-                                                )}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </form>
+                                            {msg('doTryAnotherWay')}
+                                        </Link>
+                                    </Box>
+                                </Box>
                             )}
                         {displayInfo && (
-                            <div
-                                id="kc-info"
-                                className={getClassName(
-                                    'kcSignUpClass',
-                                )}
-                            >
-                                <div
-                                    id="kc-info-wrapper"
-                                    className={getClassName(
-                                        'kcInfoAreaWrapperClass',
-                                    )}
-                                >
+                            <Box id="kc-info">
+                                <Box id="kc-info-wrapper">
                                     {infoNode}
-                                </div>
-                            </div>
+                                </Box>
+                            </Box>
                         )}
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </Box>
+                </Box>
+            </Box>
+        </Box>
     );
 }
