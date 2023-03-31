@@ -12,6 +12,8 @@ export default function RegisterUserProfile(
         I18n
     >,
 ) {
+    console.log('\n', 'it is me, register page', '\n');
+
     const { kcContext, i18n, doUseDefaultCss, Template, classes } =
         props;
     const {

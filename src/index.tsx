@@ -8,7 +8,6 @@ import { kcContext as kcAccountThemeContext } from './account/kcContext';
 // lazy-loaded components
 const KcLoginThemeApp = lazy(() => import('./login/KcApp'));
 const KcAccountThemeApp = lazy(() => import('./account/KcApp'));
-const App = lazy(() => import('./App'));
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
@@ -32,7 +31,10 @@ createRoot(document.getElementById('root')!).render(
                     );
                 }
 
-                return <App />;
+                throw new Error(
+                    'This app is a Keycloak theme' +
+                        "It isn't meant to be deployed outside of Keycloak",
+                );
             })()}
         </Suspense>
     </StrictMode>,

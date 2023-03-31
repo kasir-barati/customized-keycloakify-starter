@@ -4,9 +4,6 @@ import {
     Box,
     Typography,
     Link,
-    List,
-    ListItem,
-    ListItemText,
     InputLabel,
     TextField,
     Select,
@@ -23,6 +20,8 @@ import type { I18n } from './i18n';
 export default function Template(
     props: TemplateProps<KcContext, I18n>,
 ) {
+    console.log('\n', 'it is me, template san', '\n');
+
     const {
         displayInfo = false,
         displayMessage = true,
