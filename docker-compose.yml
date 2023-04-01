@@ -31,13 +31,15 @@ services:
       KEYCLOAK_DATABASE_SCHEMA: public
       KEYCLOAK_ENABLE_STATISTICS: true
       KEYCLOAK_DATABASE_VENDOR: postgresql
-      JAVA_OPTS: -Dkeycloak.profile=preview
+      KEYCLOAK_EXTRA_ARGS: --features=declarative-user-profile
+      # KEYCLOAK_EXTRA_ARGS: -Dkeycloak.profile=preview
+      # KEYCLOAK_EXTRA_ARGS: -Dkeycloak.profile.feature.scripts=enabled
+      # JAVA_OPTS: -Dkeycloak.profile=preview
       # KEYCLOAK_PRODUCTION: true In prod env and configure TLS pls
     volumes:
       - keycloak_volume:/tmp
       - ./build_keycloak/src/main/resources/theme/customized-keycloakify-starter:/opt/bitnami/keycloak/themes/customized-keycloakify-starter:rw
 
 volumes:
-  mongodb_volume:
   keycloak_volume:
   keycloak_db_volume:

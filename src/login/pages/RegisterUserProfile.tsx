@@ -4,7 +4,7 @@ import { UserProfileFormFields } from './shared/UserProfileFormFields';
 import type { PageProps } from 'keycloakify/login/pages/PageProps';
 import type { KcContext } from '../kcContext';
 import type { I18n } from '../i18n';
-import { Box, Button, Link } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 
 export default function RegisterUserProfile(
     props: PageProps<
@@ -12,8 +12,6 @@ export default function RegisterUserProfile(
         I18n
     >,
 ) {
-    console.log('\n', 'it is me, register page', '\n');
-
     const { kcContext, i18n, doUseDefaultCss, Template, classes } =
         props;
     const {
@@ -57,24 +55,29 @@ export default function RegisterUserProfile(
                         </Box>
                     </Box>
                 )}
-                <Box style={{ marginBottom: 30 }}>
-                    <Box id="kc-form-options">
-                        <Box>
-                            <Link href={url.loginUrl}>
+                <Box marginY={3}>
+                    <Stack direction="row" spacing={2}>
+                        <Box id="kc-form-options">
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                href={url.loginUrl}
+                            >
                                 {msg('backToLogin')}
-                            </Link>
+                            </Button>
                         </Box>
-                    </Box>
 
-                    <Box id="kc-form-buttons">
-                        <Button
-                            variant="contained"
-                            color="success"
-                            type="submit"
-                            value={msgStr('doRegister')}
-                            disabled={!isFomSubmittable}
-                        />
-                    </Box>
+                        <Box id="kc-form-buttons">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                type="submit"
+                                disabled={!isFomSubmittable}
+                            >
+                                {msgStr('doRegister')}
+                            </Button>
+                        </Box>
+                    </Stack>
                 </Box>
             </Box>
         </Template>
