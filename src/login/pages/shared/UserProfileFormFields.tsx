@@ -2,6 +2,17 @@ import { useEffect, Fragment } from 'react';
 import { useFormValidation } from 'keycloakify/login/lib/useFormValidation';
 import type { Attribute } from 'keycloakify/login/kcContext/KcContext';
 import type { I18n } from '../../i18n';
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+} from '@mui/material';
+import { Exclude } from '../../../components/Exclude';
+import { MyFormHelperText } from '../../../components/MyFormHelperText';
 
 export type UserProfileFormFieldsProps = {
     kcContext: Parameters<typeof useFormValidation>[0]['kcContext'];
@@ -27,7 +38,7 @@ export function UserProfileFormFields(
         BeforeField,
         AfterField,
     } = props;
-    const { advancedMsg } = i18n;
+    const { advancedMsg, advancedMsgStr } = i18n;
     const {
         formValidationState: {
             fieldStateByAttributeName,
@@ -60,100 +71,131 @@ export function UserProfileFormFields(
 
                 return (
                     <Fragment key={i}>
-                        {group !== currentGroup &&
-                            (currentGroup = group) !== '' && (
-                                <div>
-                                    <div>
-                                        <label id={`header-${group}`}>
+                        <Exclude
+                            condition={
+                                group !== currentGroup &&
+                                (currentGroup = group) !== ''
+                            }
+                        >
+                            <Box>
+                                <Box>
+                                    <label id={`header-${group}`}>
+                                        {advancedMsg(
+                                            groupDisplayHeader,
+                                        ) || currentGroup}
+                                    </label>
+                                </Box>
+                                <Exclude
+                                    condition={
+                                        groupDisplayDescription === ''
+                                    }
+                                >
+                                    <Box>
+                                        <label
+                                            id={`description-${group}`}
+                                        >
                                             {advancedMsg(
-                                                groupDisplayHeader,
-                                            ) || currentGroup}
+                                                groupDisplayDescription,
+                                            )}
                                         </label>
-                                    </div>
-                                    {groupDisplayDescription !==
-                                        '' && (
-                                        <div>
-                                            <label
-                                                id={`description-${group}`}
-                                            >
-                                                {advancedMsg(
-                                                    groupDisplayDescription,
-                                                )}
-                                            </label>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                                    </Box>
+                                </Exclude>
+                            </Box>
+                        </Exclude>
 
                         {BeforeField && (
                             <BeforeField attribute={attribute} />
                         )}
 
-                        <div>
-                            <div>
-                                <label htmlFor={attribute.name}>
-                                    {advancedMsg(
-                                        attribute.displayName ?? '',
-                                    )}
-                                </label>
-                                {attribute.required && <>*</>}
-                            </div>
-                            <div>
+                        <Box marginY={3}>
+                            <FormControl
+                                error={displayableErrors.length !== 0}
+                                fullWidth={true}
+                            >
                                 {(() => {
                                     const { options } =
                                         attribute.validators;
+                                    const displayName =
+                                        advancedMsgStr(
+                                            attribute.displayName ??
+                                                '',
+                                        );
 
                                     if (options !== undefined) {
+                                        const labelId = `select-${attribute.name}-label`;
                                         return (
-                                            <select
-                                                id={attribute.name}
-                                                name={attribute.name}
-                                                onChange={(event) =>
-                                                    formValidationDispatch(
-                                                        {
-                                                            action: 'update value',
-                                                            name: attribute.name,
-                                                            newValue:
-                                                                event
-                                                                    .target
-                                                                    .value,
-                                                        },
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    formValidationDispatch(
-                                                        {
-                                                            action: 'focus lost',
-                                                            name: attribute.name,
-                                                        },
-                                                    )
-                                                }
-                                                value={value}
-                                            >
-                                                {options.options.map(
-                                                    (option) => (
-                                                        <option
-                                                            key={
-                                                                option
-                                                            }
-                                                            value={
-                                                                option
-                                                            }
-                                                        >
-                                                            {option}
-                                                        </option>
-                                                    ),
-                                                )}
-                                            </select>
+                                            <>
+                                                <InputLabel
+                                                    id={labelId}
+                                                >
+                                                    {displayName}
+                                                </InputLabel>
+                                                <Select
+                                                    required={
+                                                        attribute.required
+                                                    }
+                                                    labelId={labelId}
+                                                    id={
+                                                        attribute.name
+                                                    }
+                                                    name={
+                                                        attribute.name
+                                                    }
+                                                    value={value}
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        formValidationDispatch(
+                                                            {
+                                                                action: 'update value',
+                                                                name: attribute.name,
+                                                                newValue:
+                                                                    event
+                                                                        .target
+                                                                        .value,
+                                                            },
+                                                        )
+                                                    }
+                                                    onBlur={() =>
+                                                        formValidationDispatch(
+                                                            {
+                                                                action: 'focus lost',
+                                                                name: attribute.name,
+                                                            },
+                                                        )
+                                                    }
+                                                >
+                                                    {options.options.map(
+                                                        (option) => (
+                                                            <MenuItem
+                                                                key={
+                                                                    option
+                                                                }
+                                                                value={
+                                                                    option
+                                                                }
+                                                            >
+                                                                {
+                                                                    option
+                                                                }
+                                                            </MenuItem>
+                                                        ),
+                                                    )}
+                                                </Select>
+                                            </>
                                         );
                                     }
 
                                     return (
-                                        <input
+                                        <TextField
+                                            label={displayName}
+                                            variant="outlined"
                                             type={(() => {
                                                 switch (
                                                     attribute.name
                                                 ) {
+                                                    case 'email':
+                                                        return 'email';
                                                     case 'password-confirm':
                                                     case 'password':
                                                         return 'password';
@@ -164,6 +206,9 @@ export function UserProfileFormFields(
                                             id={attribute.name}
                                             name={attribute.name}
                                             value={value}
+                                            required={
+                                                attribute.required
+                                            }
                                             onChange={(event) =>
                                                 formValidationDispatch(
                                                     {
@@ -197,36 +242,22 @@ export function UserProfileFormFields(
                                         />
                                     );
                                 })()}
-                                {displayableErrors.length !== 0 &&
-                                    (() => {
-                                        const divId = `input-error-${attribute.name}`;
 
-                                        return (
-                                            <>
-                                                <style>{`#${divId} > span: { display: block; }`}</style>
-                                                <span
-                                                    id={divId}
-                                                    style={{
-                                                        position:
-                                                            displayableErrors.length ===
-                                                            1
-                                                                ? 'absolute'
-                                                                : undefined,
-                                                    }}
-                                                    aria-live="polite"
-                                                >
-                                                    {displayableErrors.map(
-                                                        ({
-                                                            errorMessage,
-                                                        }) =>
-                                                            errorMessage,
-                                                    )}
-                                                </span>
-                                            </>
-                                        );
-                                    })()}
-                            </div>
-                        </div>
+                                <Exclude
+                                    condition={
+                                        displayableErrors.length === 0
+                                    }
+                                >
+                                    <MyFormHelperText
+                                        errorMessage={
+                                            displayableErrors[0]
+                                                ?.errorMessageStr
+                                        }
+                                        defaultMessage=""
+                                    />
+                                </Exclude>
+                            </FormControl>
+                        </Box>
                         {AfterField && (
                             <AfterField attribute={attribute} />
                         )}

@@ -147,7 +147,8 @@ export default function Login(
                                                       })}
                                             />
                                             <FormHelperText>
-                                                Please enter your
+                                                Please enter
+                                                your&nbsp;
                                                 {msg(label)}.
                                             </FormHelperText>
                                         </>

@@ -16,6 +16,7 @@ import { type TemplateProps } from 'keycloakify/login/TemplateProps';
 import { useGetClassName } from 'keycloakify/login/lib/useGetClassName';
 import type { KcContext } from './kcContext';
 import type { I18n } from './i18n';
+import { MyParticles } from '../components/MyParticles';
 
 export default function Template(
     props: TemplateProps<KcContext, I18n>,
@@ -78,8 +79,15 @@ export default function Template(
             textAlign="center"
             bgcolor="rgba(213, 213,213, 0.7)"
             minHeight="100vh"
+            sx={{
+                '& > *': { marginBottom: '2rem' },
+                // In the CSS box model, an element is represented as a rectangular box, which consists of four areas: content, padding, border, and margin. The content area is where the actual content of the element is displayed, the padding area is the space between the content and the border, the border is a line around the padding, and the margin is the space between the border and the next element.
+                // Two margins are considered "adjoining" if there are no line boxes (i.e., text or other content that creates a new line), clearance (i.e., the space between two adjacent floats), padding, or border between them. In other words, if there is nothing separating the two margins, then they are adjoining.
+                // That's why we need this 1px padding
+                'paddingBottom': '1px',
+            }}
         >
-            <Box id="kc-header" marginBottom={4}>
+            <Box id="kc-header">
                 <Box
                     id="kc-header-wrapper"
                     padding={1}
@@ -98,7 +106,6 @@ export default function Template(
 
             <Box
                 width="50vw"
-                marginY={1}
                 marginX="auto"
                 padding={3}
                 borderRadius={13}
@@ -174,12 +181,6 @@ export default function Template(
                     ) ? (
                         displayRequiredFields ? (
                             <Box>
-                                <Box>
-                                    <span>
-                                        <span>*</span>
-                                        {msg('requiredFields')}
-                                    </span>
-                                </Box>
                                 <Box>
                                     <Typography
                                         variant="h5"
@@ -266,7 +267,7 @@ export default function Template(
                             message !== undefined &&
                             (message.type !== 'warning' ||
                                 !isAppInitiatedAction) && (
-                                <Box marginY={1}>
+                                <Box marginY={2}>
                                     {message.type === 'success' && (
                                         <span></span>
                                     )}
@@ -330,6 +331,7 @@ export default function Template(
                     </Box>
                 </Box>
             </Box>
+            <MyParticles />
         </Box>
     );
 }

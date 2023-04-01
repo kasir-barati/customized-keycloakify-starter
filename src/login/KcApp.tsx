@@ -3,7 +3,6 @@ import { lazy, Suspense } from 'react';
 import Fallback from 'keycloakify/login';
 import type { KcContext } from './kcContext';
 import { useI18n } from './i18n';
-import { MyParticles } from '../components/MyParticles';
 
 const Template = lazy(() => import('./Template'));
 const DefaultTemplate = lazy(
@@ -45,7 +44,6 @@ export default function App(props: { kcContext: KcContext }) {
                                     Template={Template}
                                     doUseDefaultCss={false}
                                 />
-                                <MyParticles />
                             </>
                         );
                     case 'register-user-profile.ftl':
@@ -57,7 +55,6 @@ export default function App(props: { kcContext: KcContext }) {
                                     Template={Template}
                                     doUseDefaultCss={false}
                                 />
-                                <MyParticles />
                             </>
                         );
                     case 'terms.ftl':
