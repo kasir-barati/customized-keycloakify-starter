@@ -1,4 +1,4 @@
-# My changes:
+# Run in dev env:
 
 ```cmd
 cp .env.example .env
