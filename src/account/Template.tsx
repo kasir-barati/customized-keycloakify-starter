@@ -1,12 +1,10 @@
-// Copy pasted from: https://github.com/InseeFrLab/keycloakify/blob/main/src/login/Template.tsx
-
-import { clsx } from 'keycloakify/tools/clsx';
-import { usePrepareTemplate } from 'keycloakify/lib/usePrepareTemplate';
-import { type TemplateProps } from 'keycloakify/account/TemplateProps';
 import { useGetClassName } from 'keycloakify/account/lib/useGetClassName';
-import type { KcContext } from './kcContext';
-import type { I18n } from './i18n';
+import { type TemplateProps } from 'keycloakify/account/TemplateProps';
+import { usePrepareTemplate } from 'keycloakify/lib/usePrepareTemplate';
 import { assert } from 'keycloakify/tools/assert';
+import { clsx } from 'keycloakify/tools/clsx';
+import type { I18n } from './i18n';
+import type { KcContext } from './kcContext';
 
 export default function Template(
     props: TemplateProps<KcContext, I18n>,

@@ -7,50 +7,6 @@ pnpm build
 docker compose up
 ```
 
-<p align="center">
-    <i>🚀 A starter/demo project for <a href="https://keycloakify.dev">Keycloakify</a> v7 🚀</i>
-    <br/>
-    <br/>
-    <img src="https://github.com/codegouvfr/keycloakify-starter/workflows/ci/badge.svg?branch=main">
-    <br/>
-    <br/>
-    <a href="https://starter.keycloakify.dev">Authenticated React SPA</a>
-</p>
-
-# Introduction
-
-This repo constitutes an easily reusable setup for a standalone Keycloak theme project OR for a SPA React App that generates a
-Keycloak theme that goes along with it.  
-If you are only looking to create a theme (and not a theme + an App) there are a lot of things that you can remove from this starter: [Please read this section of the README](#standalone-keycloak-theme).
-
-> ❗️ WARNING ❗️: Don't waste time trying to port this setup to [Vite](https://vitejs.dev/).  
-> Currently Keycloakify only works colocated with Webpack projects but [we are working toward enabeling collocation with Vite and Next.js projects](https://github.com/keycloakify/keycloakify/pull/275)!
-
-# Quick start
-
-```bash
-yarn
-yarn build-keycloak-theme # Build the theme one time (some assets will be copied to
-              # public/keycloak_static, they are needed to dev your page outside of Keycloak)
-yarn start # See the Hello World app
-# Uncomment line 15 of src/keycloak-theme/login/kcContext, reload https://localhost:3000
-# You can now develop your Login pages. (Don't forget to comment it back when you're done)
-
-# Think your theme is ready? Run
-yarn build-keycloak-theme
-# Read the instruction printed on the console to see how to test
-# your theme on a real Keycloak instance.
-
-# For customizing other pages at the component level
-npx eject-keycloak-page # Then select the page you want
-
-# For initializing your email theme
-npx initialize-email-theme
-
-# For downloading the default theme
-npx download-builtin-keycloak-theme
-```
-
 # The CI workflow
 
 - You need to manually allow GitHub Action to push on your repositroy. For this reason the initial setup will fail. You need to enabled permission and re-run failed job: [see video](https://user-images.githubusercontent.com/6702424/213480604-0aac0ea7-487f-491d-94ae-df245b2c7ee8.mov).
@@ -73,77 +29,9 @@ npx download-builtin-keycloak-theme
 
 If you want an example of an app that put that setup in production checkout onyxia-ui: [the repo](https://github.com/InseeFrLab/onyxia-ui), [the login](https://auth.lab.sspcloud.fr/auth/realms/sspcloud/protocol/openid-connect/auth?client_id=onyxia&redirect_uri=https%3A%2F%2Fonyxia.lab.sspcloud.fr), [the app](https://datalab.sspcloud.fr).
 
-# Standalone vs `--external-assets`
+## .github/workflows/ci.yaml
 
-The CI creates two jars
-
-- `keycloak-theme.jar`: Generated with `npx keycloakify --external-assets`, the assets, located `static/**/*`, like for example
-  `static/js/main.<hash>.js` will be downloaded from `https://starter.keycloakify.dev/static/js/main.<hash>.js` (`starter.keycloakify.dev` is
-  specified in the `package.json`.
-- `standalone-keycloak-theme.jar`: Generated with `npx keycloakify`, this theme is fully standalone, all assets will be served by the
-  Keycloak server, for example `static/js/main.<hash>.js` will be downloaded from an url like `http://<your keycloak url>/resources/xxxx/login/keycloakify-starter/build/static/js/main.<hash>.js`.
-
-More info on the `--external-assets` build option [here](https://docs.keycloakify.dev/v/v6/build-options#external-assets).
-
-# Docker
-
-```bash
-docker build -f Dockerfile -t codegouvfr/keycloakify-starter:test .
-#OR (to reproduce how the image is built in the ci workflow):
-yarn && yarn build && tar -cvf build.tar ./build && docker build -f Dockerfile.ci -t codegouvfr/keycloakify-starter:test . && rm build.tar
-
-docker run -it -dp 8083:80 codegouvfr/keycloakify-starter:test
-```
-
-# Standalone keycloak theme
-
-If you are only looking to create a keycloak theme, you can run theses few commands
-after clicking ![image](https://user-images.githubusercontent.com/6702424/98155461-92395e80-1ed6-11eb-93b2-98c64453043f.png) to refactor the template
-and remove unnecessary files.
-
-```bash
-rm -r src/App
-rm src/keycloak-theme/login/valuesTransferredOverUrl.ts
-mv src/keycloak-theme/* src/
-rm -r src/keycloak-theme
-
-cat << EOF > src/index.tsx
-import { createRoot } from "react-dom/client";
-import { StrictMode, lazy, Suspense } from "react";
-import { kcContext as kcLoginThemeContext } from "./login/kcContext";
-import { kcContext as kcAccountThemeContext } from "./account/kcContext";
-
-const KcLoginThemeApp = lazy(() => import("./login/KcApp"));
-const KcAccountThemeApp = lazy(() => import("./account/KcApp"));
-
-createRoot(document.getElementById("root")!).render(
-    <StrictMode>
-        <Suspense>
-            {(()=>{
-
-                if( kcLoginThemeContext !== undefined ){
-                    return <KcLoginThemeApp kcContext={kcLoginThemeContext} />;
-                }
-
-                if( kcAccountThemeContext !== undefined ){
-                    return <KcAccountThemeApp kcContext={kcAccountThemeContext} />;
-                }
-
-                throw new Error(
-                  "This app is a Keycloak theme" +
-                  "It isn't meant to be deployed outside of Keycloak"
-                );
-
-            })()}
-        </Suspense>
-    </StrictMode>
-);
-
-EOF
-
-rm .dockerignore Dockerfile Dockerfile.ci nginx.conf
-
-cat << EOF > .github/workflows/ci.yaml
+```yml
 name: ci
 on:
   push:
@@ -154,26 +42,25 @@ on:
       - main
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     if: github.event.head_commit.author.name != 'actions'
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2.1.3
-      with:
-        node-version: '16'
-    - uses: bahmutov/npm-install@v1
-    - run: yarn build
-    - run: npx keycloakify
-    - uses: actions/upload-artifact@v2
-      with:
-        name: standalone_keycloak_theme
-        path: build_keycloak/target/*keycloak-theme*.jar
-    - uses: actions/upload-artifact@v2
-      with:
-        name: build
-        path: build
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.3
+        with:
+          node-version: '16'
+      - uses: bahmutov/npm-install@v1
+      - run: yarn build
+      - run: npx keycloakify
+      - uses: actions/upload-artifact@v2
+        with:
+          name: standalone_keycloak_theme
+          path: build_keycloak/target/*keycloak-theme*.jar
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
 
   check_if_version_upgraded:
     name: Check if version upgrade
@@ -184,10 +71,10 @@ jobs:
       to_version: \${{ steps.step1.outputs.to_version }}
       is_upgraded_version: \${{ steps.step1.outputs.is_upgraded_version }}
     steps:
-    - uses: garronej/ts-ci@v1.1.7
-      id: step1
-      with:
-        action_name: is_package_json_version_upgraded
+      - uses: garronej/ts-ci@v1.1.7
+        id: step1
+        with:
+          action_name: is_package_json_version_upgraded
 
   create_github_release:
     runs-on: ubuntu-latest
@@ -202,23 +89,21 @@ jobs:
         needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
       )
     steps:
-    - run: mkdir jars
-    - uses: actions/download-artifact@v2
-      with:
-        name: standalone_keycloak_theme
-    - run: mv *keycloak-theme*.jar jars/standalone-keycloak-theme.jar
-    - uses: softprops/action-gh-release@v1
-      with:
-        name: Release v\${{ needs.check_if_version_upgraded.outputs.to_version }}
-        tag_name: v\${{ needs.check_if_version_upgraded.outputs.to_version }}
-        target_commitish: \${{ github.head_ref || github.ref }}
-        generate_release_notes: true
-        files: |
-          jars/standalone-keycloak-theme.jar
-        draft: false
-        prerelease: \${{ needs.check_if_version_upgraded.outputs.is_release_beta == 'true' }}
-      env:
-        GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+      - run: mkdir jars
+      - uses: actions/download-artifact@v2
+        with:
+          name: standalone_keycloak_theme
+      - run: mv *keycloak-theme*.jar jars/standalone-keycloak-theme.jar
+      - uses: softprops/action-gh-release@v1
+        with:
+          name: Release v\${{ needs.check_if_version_upgraded.outputs.to_version }}
+          tag_name: v\${{ needs.check_if_version_upgraded.outputs.to_version }}
+          target_commitish: \${{ github.head_ref || github.ref }}
+          generate_release_notes: true
+          files: |
+            jars/standalone-keycloak-theme.jar
+          draft: false
+          prerelease: \${{ needs.check_if_version_upgraded.outputs.is_release_beta == 'true' }}
+        env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
 ```
-
-You can also remove `jwt-decode`, `keycloak-js`, `powerhooks` and `tsafe` from your dependencies.

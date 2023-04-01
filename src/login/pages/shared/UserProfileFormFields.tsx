@@ -1,18 +1,17 @@
-import { useEffect, Fragment } from 'react';
-import { useFormValidation } from 'keycloakify/login/lib/useFormValidation';
-import type { Attribute } from 'keycloakify/login/kcContext/KcContext';
-import type { I18n } from '../../i18n';
 import {
     Box,
     FormControl,
     InputLabel,
     MenuItem,
     Select,
-    SelectChangeEvent,
     TextField,
 } from '@mui/material';
+import type { Attribute } from 'keycloakify/login/kcContext/KcContext';
+import { useFormValidation } from 'keycloakify/login/lib/useFormValidation';
+import { Fragment, useEffect } from 'react';
 import { Exclude } from '../../../components/Exclude';
 import { MyFormHelperText } from '../../../components/MyFormHelperText';
+import type { I18n } from '../../i18n';
 
 export type UserProfileFormFieldsProps = {
     kcContext: Parameters<typeof useFormValidation>[0]['kcContext'];

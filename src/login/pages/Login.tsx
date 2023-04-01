@@ -1,21 +1,20 @@
-// ejected using 'npx eject-keycloak-page'
 import {
     Box,
-    TextField,
+    Button,
+    Checkbox,
     FormControl,
+    FormControlLabel,
+    FormGroup,
     FormHelperText,
     Link,
-    Checkbox,
-    FormGroup,
-    FormControlLabel,
-    Button,
     Stack,
+    TextField,
 } from '@mui/material';
-import { useState, type FormEventHandler } from 'react';
-import { useConstCallback } from 'keycloakify/tools/useConstCallback';
 import type { PageProps } from 'keycloakify/login/pages/PageProps';
-import type { KcContext } from '../kcContext';
+import { useConstCallback } from 'keycloakify/tools/useConstCallback';
+import { useState, type FormEventHandler } from 'react';
 import type { I18n } from '../i18n';
+import type { KcContext } from '../kcContext';
 
 export default function Login(
     // a PageProps object that has some fields specific to the "login.ftl" page in Keycloak.

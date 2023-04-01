@@ -1,22 +1,22 @@
 // Copy pasted from: https://github.com/InseeFrLab/keycloakify/blob/main/src/login/Template.tsx
-import { assert } from 'keycloakify/tools/assert';
 import {
     Box,
-    Typography,
-    Link,
+    FormControl,
     InputLabel,
-    TextField,
+    Link,
+    MenuItem,
     Select,
     SelectChangeEvent,
-    MenuItem,
-    FormControl,
+    TextField,
+    Typography,
 } from '@mui/material';
 import { usePrepareTemplate } from 'keycloakify/lib/usePrepareTemplate';
-import { type TemplateProps } from 'keycloakify/login/TemplateProps';
 import { useGetClassName } from 'keycloakify/login/lib/useGetClassName';
-import type { KcContext } from './kcContext';
-import type { I18n } from './i18n';
+import { type TemplateProps } from 'keycloakify/login/TemplateProps';
+import { assert } from 'keycloakify/tools/assert';
 import { MyParticles } from '../components/MyParticles';
+import type { I18n } from './i18n';
+import type { KcContext } from './kcContext';
 
 export default function Template(
     props: TemplateProps<KcContext, I18n>,

@@ -1,10 +1,10 @@
 // ejected using 'npx eject-keycloak-page'
-import { useState } from 'react';
-import { UserProfileFormFields } from './shared/UserProfileFormFields';
-import type { PageProps } from 'keycloakify/login/pages/PageProps';
-import type { KcContext } from '../kcContext';
-import type { I18n } from '../i18n';
 import { Box, Button, Stack } from '@mui/material';
+import type { PageProps } from 'keycloakify/login/pages/PageProps';
+import { useState } from 'react';
+import type { I18n } from '../i18n';
+import type { KcContext } from '../kcContext';
+import { UserProfileFormFields } from './shared/UserProfileFormFields';
 
 export default function RegisterUserProfile(
     props: PageProps<

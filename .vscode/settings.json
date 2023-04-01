@@ -1,4 +1,12 @@
 {
     "javascript.preferences.importModuleSpecifier": "relative",
-    "typescript.preferences.importModuleSpecifier": "relative"
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+        "source.sortMembers": true
+    },
+    "terminal.integrated.wordSeparators": " ()[]{}',\"`─‘’_",
+    "editor.wordSeparators": "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?_"
 }

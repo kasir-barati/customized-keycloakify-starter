@@ -1,9 +1,9 @@
 import { CssBaseline } from '@mui/material';
+import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from 'reportWebVitals';
-import { StrictMode, lazy, Suspense } from 'react';
-import { kcContext as kcLoginThemeContext } from './login/kcContext';
 import { kcContext as kcAccountThemeContext } from './account/kcContext';
+import { kcContext as kcLoginThemeContext } from './login/kcContext';
 
 // lazy-loaded components
 const KcLoginThemeApp = lazy(() => import('./login/KcApp'));

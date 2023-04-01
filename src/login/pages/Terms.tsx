@@ -1,10 +1,10 @@
 // ejected using 'npx eject-keycloak-page'
 import { useRerenderOnStateChange } from 'evt/hooks';
-import { Markdown } from 'keycloakify/tools/Markdown';
-import type { PageProps } from 'keycloakify/login/pages/PageProps';
 import { evtTermMarkdown } from 'keycloakify/login/lib/useDownloadTerms';
-import type { KcContext } from '../kcContext';
+import type { PageProps } from 'keycloakify/login/pages/PageProps';
+import { Markdown } from 'keycloakify/tools/Markdown';
 import type { I18n } from '../i18n';
+import type { KcContext } from '../kcContext';
 
 export default function Terms(
     props: PageProps<
