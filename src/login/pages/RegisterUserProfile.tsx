@@ -23,7 +23,7 @@ export default function RegisterUserProfile(
 
     const { msg, msgStr } = i18n;
 
-    const [isFomSubmittable, setIsFomSubmittable] = useState(false);
+    const [isFormSubmittable, setIsFormSubmittable] = useState(false);
 
     return (
         <Template
@@ -41,7 +41,7 @@ export default function RegisterUserProfile(
                 <UserProfileFormFields
                     kcContext={kcContext}
                     onIsFormSubmittableValueChange={
-                        setIsFomSubmittable
+                        setIsFormSubmittable
                     }
                     i18n={i18n}
                 />
@@ -72,7 +72,7 @@ export default function RegisterUserProfile(
                                 variant="contained"
                                 color="success"
                                 type="submit"
-                                disabled={!isFomSubmittable}
+                                disabled={!isFormSubmittable}
                             >
                                 {msgStr('doRegister')}
                             </Button>
